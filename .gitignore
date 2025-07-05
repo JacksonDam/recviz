@@ -1,0 +1,10 @@
+*.pyc
+__pycache__
+db.sqlite3
+.DS_Store
+log/*
+log_tensorboard/*
+C:\\*
+dataset
+.venv
+recviz-dev

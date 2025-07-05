@@ -1,0 +1,12 @@
+image: node:latest
+
+stages:
+  - lint
+  - test
+
+eslint:
+  stage: lint
+  script:
+    - cd recviz-frontend
+    - npm install
+    - npx eslint --fix .
