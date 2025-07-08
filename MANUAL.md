@@ -1,5 +1,5 @@
 # RecViz Starter Guide
-Almost everything you need to know in 1 minute flat: https://www.youtube.com/watch?v=C-sAZBdgCtU
+Almost everything you need to know in 1 minute flat: https://youtu.be/FmvEd6L8uUA
 
 Tips list to get started:
 - You start in the User-item Interaction Layer
