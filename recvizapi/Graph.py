@@ -58,7 +58,6 @@ class Graph:
         if self.filters:
             users_to_include = set()
             items_to_include = set()
-            print("WOW", self.filters)
             for filter_feature, filter_queries in self.filters.items():
                 for filter_query in filter_queries:
                     if "-" in filter_query:
@@ -92,16 +91,13 @@ class Graph:
                                 self.nx_graph.add_node(user["id"], **user)
                         for item_id in self.item_nodes:
                             item = self.item_nodes[item_id]
-                            print("WOAH", item, item_id)
                             if filter_feature in item and str(item[filter_feature]) == filter_query:
                                 item["filter_feature"] = filter_feature
                                 item["filter_query"] = filter_query
                                 items_to_include.add(item_id)
 
             for timestamp in timestamps:
-                print(users_to_include, items_to_include, "POW")
                 ts_interactions = interaction_history[timestamp]
-                print(ts_interactions, "CROW")
                 for interaction in ts_interactions:
                     if "user_id" in interaction and "item_id" in interaction and interaction["user_id"] in users_to_include and (interaction["item_id"] in items_to_include or not items_to_include):
                         item = self.item_nodes[interaction["item_id"]]
