@@ -107,7 +107,8 @@ class Graph:
                         if self.nx_graph.has_edge(user_node_id, item_node_id):
                             self.nx_graph.add_edge(user_node_id, item_node_id,
                                                    self.nx_graph[user_node_id][item_node_id]['weight'] + 1)
-                        self.nx_graph.add_edge(user_node_id, item_node_id, weight=1)
+                        else:
+                            self.nx_graph.add_edge(user_node_id, item_node_id, weight=1)
         else:
             for user_id in self.user_nodes:
                 node_attributes = self.user_nodes[user_id]
@@ -127,7 +128,8 @@ class Graph:
                         if self.nx_graph.has_edge(user_node_id, item_node_id):
                             self.nx_graph.add_edge(user_node_id, item_node_id,
                                                    self.nx_graph[user_node_id][item_node_id]['weight'] + 1)
-                        self.nx_graph.add_edge(user_node_id, item_node_id, weight=1)
+                        else:
+                            self.nx_graph.add_edge(user_node_id, item_node_id, weight=1)
 
         print("ASSEMBLED NX GRAPH WITH", self.nx_graph.number_of_nodes(), "NODES", self.nx_graph.number_of_edges(), "EDGES")
 
