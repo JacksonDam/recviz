@@ -57,6 +57,8 @@ class Graph:
         interaction_history = self.ds_obj.get_interaction_history()
         if self.filters:
             users_to_include = set()
+            items_to_include = set()
+            print("WOW", self.filters)
             for filter_feature, filter_queries in self.filters.items():
                 for filter_query in filter_queries:
                     if "-" in filter_query:
@@ -73,6 +75,13 @@ class Graph:
                                 user["filter_query"] = filter_query
                                 users_to_include.add(user_id)
                                 self.nx_graph.add_node(user["id"], **user)
+                        for item_id in self.item_nodes:
+                            item = self.item_nodes[item_id]
+                            if filter_feature in item and num1 <= int(item[filter_feature]) <= num2:
+                                item["filter_feature"] = filter_feature
+                                item["filter_query"] = filter_query
+                                items_to_include.add(item_id)
+                                self.nx_graph.add_node(item["id"], **item)
                     else:
                         for user_id in self.user_nodes:
                             user = self.user_nodes[user_id]
@@ -81,18 +90,28 @@ class Graph:
                                 user["filter_query"] = filter_query
                                 users_to_include.add(user_id)
                                 self.nx_graph.add_node(user["id"], **user)
-                            else:
-                                print(user[filter_feature], filter_query)
+                        for item_id in self.item_nodes:
+                            item = self.item_nodes[item_id]
+                            print("WOAH", item, item_id)
+                            if filter_feature in item and str(item[filter_feature]) == filter_query:
+                                item["filter_feature"] = filter_feature
+                                item["filter_query"] = filter_query
+                                items_to_include.add(item_id)
 
             for timestamp in timestamps:
+                print(users_to_include, items_to_include, "POW")
                 ts_interactions = interaction_history[timestamp]
+                print(ts_interactions, "CROW")
                 for interaction in ts_interactions:
-                    if "user_id" in interaction and "item_id" in interaction and interaction["user_id"] in users_to_include:
+                    if "user_id" in interaction and "item_id" in interaction and interaction["user_id"] in users_to_include and (interaction["item_id"] in items_to_include or not items_to_include):
                         item = self.item_nodes[interaction["item_id"]]
                         item_node_id = item["id"]
                         self.nx_graph.add_node(item_node_id, **item)
                         user_node_id = self.user_nodes[interaction["user_id"]]["id"]
-                        self.nx_graph.add_edge(user_node_id, item_node_id)
+                        if self.nx_graph.has_edge(user_node_id, item_node_id):
+                            self.nx_graph.add_edge(user_node_id, item_node_id,
+                                                   self.nx_graph[user_node_id][item_node_id]['weight'] + 1)
+                        self.nx_graph.add_edge(user_node_id, item_node_id, weight=1)
         else:
             for user_id in self.user_nodes:
                 node_attributes = self.user_nodes[user_id]
@@ -109,7 +128,10 @@ class Graph:
                         item = self.item_nodes[interaction["item_id"]]
                         item_node_id = item["id"]
                         user_node_id = self.user_nodes[interaction["user_id"]]["id"]
-                        self.nx_graph.add_edge(user_node_id, item_node_id)
+                        if self.nx_graph.has_edge(user_node_id, item_node_id):
+                            self.nx_graph.add_edge(user_node_id, item_node_id,
+                                                   self.nx_graph[user_node_id][item_node_id]['weight'] + 1)
+                        self.nx_graph.add_edge(user_node_id, item_node_id, weight=1)
 
         print("ASSEMBLED NX GRAPH WITH", self.nx_graph.number_of_nodes(), "NODES", self.nx_graph.number_of_edges(), "EDGES")
 

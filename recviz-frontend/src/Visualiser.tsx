@@ -78,7 +78,7 @@ export const Visualiser: React.FC<{
 
   useEffect(() => {
     if (!dataset) return;
-    fetch(`http://localhost:8000/recvizapi/get_user_features/${dataset}`)
+    fetch(`http://localhost:8000/recvizapi/get_features/${dataset}`)
       .then((response) => response.json())
       .then((data: FeatureData) => {
         if (data.fields.length > 0 && data.fields !== features) {

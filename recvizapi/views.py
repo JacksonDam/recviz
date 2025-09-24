@@ -58,7 +58,13 @@ def get_dataset_models(request, dataset_name):
     else:
         return JsonResponse({"models": []})
 
-def get_user_features(request, dataset_name):
+def get_features(request, dataset_name):
+    dsm_entry = dataset_manager.get_dataset(dataset_name)
+    if dsm_entry and dsm_entry["dataset_obj"].get_validity():
+        dataset_obj = dsm_entry["dataset_obj"]
+        return JsonResponse({"fields": dataset_obj.get_features()})
+
+def get_item_mapping(request, dataset_name):
     dsm_entry = dataset_manager.get_dataset(dataset_name)
     if dsm_entry and dsm_entry["dataset_obj"].get_validity():
         dataset_obj = dsm_entry["dataset_obj"]

@@ -5,6 +5,7 @@ class Dataset:
         self.user_mapping = {}
         self.user_ids = None
         self.user_features = ["user_history_length"]
+        self.item_features = []
         self.item_mapping = {}
         self.interaction_history = {}
         self.timestamps = None
@@ -46,6 +47,7 @@ class Dataset:
     def load_item_features(self, file_path):
         with open(file_path, 'r', encoding='utf-8') as f:
             field_names = [field.split(':')[0] for field in f.readline().strip().split('\t')]
+            self.item_features.extend(field_names)
             for line in f:
                 fields = line.strip().split('\t')
                 item_id = fields[0]
@@ -79,6 +81,12 @@ class Dataset:
 
     def get_user_features(self):
         return self.user_features
+
+    def get_item_features(self):
+        return self.item_features
+
+    def get_features(self):
+        return self.user_features + self.item_features
 
     def get_item_ids(self):
         return self.item_ids

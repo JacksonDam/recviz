@@ -106,7 +106,7 @@ describe('Visualiser Component', () => {
     global.fetch = vi.fn();
 
     vi.mocked(global.fetch).mockImplementation((url) => {
-      if (url.includes('/get_user_features/')) {
+      if (url.includes('/get_features/')) {
         return Promise.resolve({
           json: () => Promise.resolve({ fields: ['genre', 'year', 'rating'] }),
         } as Response);
@@ -148,7 +148,7 @@ describe('Visualiser Component', () => {
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
-        'http://localhost:8000/recvizapi/get_user_features/test-dataset'
+        'http://localhost:8000/recvizapi/get_features/test-dataset'
       );
       expect(global.fetch).toHaveBeenCalledWith(
         'http://localhost:8000/recvizapi/get_dataset_models/test-dataset'
